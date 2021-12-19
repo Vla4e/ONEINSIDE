@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Tab 1234
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div></div>
+  <ion-grid>
+    <ion-row class="row header">
+      <ion-col size="1">ID</ion-col>
+      <ion-col size="2">Name</ion-col>
+      <ion-col size="2">Position</ion-col>
+      <ion-col size="3">Starting year</ion-col>
+      <ion-col size="2">Level</ion-col>
+      <ion-col size="2">Actions</ion-col>
+    </ion-row>
+    <ion-row *ngFor="let developer of developers" class="row">
+      <ion-col size="1">{{ developer.id}}</ion-col>
+      <ion-col size="2">{{ developer.name }}</ion-col>
+      <ion-col size="2">{{ developer.position}}</ion-col>
+      <ion-col size="3">{{ developer.startWork}}</ion-col>
+      <ion-col size="2">{{ developer.level}}</ion-col>
+      <ion-col size="2">
+        <ion-button color="primary" size="small" (click)="editDeveloper(developer.id)">Primary</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-modal [isOpen]="isUpsertingDeveloper">
+    <ng-template>
+      <div>I AM CONTENT</div>
+      <ion-input [(ngModel)]="editDeveloperObj.name"></ion-input>
+      <ion-button color="primary" size="small" (click)="onUpsertDeveloper()">Primary</ion-button>
+    </ng-template>
+  </ion-modal>
+</ion-content>
