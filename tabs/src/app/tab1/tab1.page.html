@@ -24,16 +24,62 @@
       <ion-col size="3">{{ developer.startWork}}</ion-col>
       <ion-col size="2">{{ developer.level}}</ion-col>
       <ion-col size="2">
-        <ion-button color="primary" size="small" (click)="editDeveloper(developer.id)">Primary</ion-button>
+        <ion-button color="primary" size="small" (click)="editDeveloper(developer.id)">Edit</ion-button>
+        <ion-button color="danger" size="small" (click)="isDeletingDeveloper = {modal: true, id: developer.id }">Delete</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>
-
-  <ion-modal [isOpen]="isUpsertingDeveloper">
+  <ion-button color="primary" size="large" (click)="createDeveloper()">Add Developer</ion-button>
+  
+  <ion-modal [isOpen]="isDeletingDeveloper.modal" (didDismiss) ="isDeletingDeveloper.modal = false">
     <ng-template>
-      <div>I AM CONTENT</div>
-      <ion-input [(ngModel)]="editDeveloperObj.name"></ion-input>
-      <ion-button color="primary" size="small" (click)="onUpsertDeveloper()">Primary</ion-button>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            Are you sure you want to remove this developer?
+          </ion-card-title>
+          <ion-button color="danger" size="small" (click)="deleteDeveloper(isDeletingDeveloper.id)">Yes</ion-button>
+        </ion-card-header>
+      </ion-card>
+    </ng-template>
+  </ion-modal>
+  
+
+  <ion-modal [isOpen]="isUpsertingDeveloper" (didDismiss)="isUpsertingDeveloper = false">
+    <ng-template>
+      <ion-list>
+        <ion-item>
+          <ion-label>Name</ion-label>
+          <ion-input class="ion-text-center" placeholder="Developer Name" [(ngModel)]="editDeveloperObj.name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Position</ion-label>
+          <ion-select placeholder="Select Position" interface="popover" [(ngModel)]="editDeveloperObj.position">
+            <ion-select-option value="frontend">Frontend</ion-select-option>
+            <ion-select-option value="backend">Backend</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Level</ion-label>
+          <ion-select interface="popover" placeholder="Select Position" [(ngModel)]="editDeveloperObj.level">
+            <ion-select-option value="apprentice">apprentice</ion-select-option>
+            <ion-select-option value="junior">junior</ion-select-option>
+            <ion-select-option value="mid">mid</ion-select-option>
+            <ion-select-option value="senior">senior</ion-select-option>
+            <ion-select-option value="architect">architect</ion-select-option>
+            <ion-select-option value="consultant">consultant</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label>Start Year</ion-label>
+          <ion-datetime [(ngModel)]="editDeveloperObj.startWork" presentation="year"></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <div class="display: flex; justify-content: center; width: 100%;">
+            <ion-button color="primary" size="small" (click)="onUpsertDeveloper()">Submit Changes</ion-button>
+          </div>
+        </ion-item>
+      </ion-list>
     </ng-template>
   </ion-modal>
 </ion-content>

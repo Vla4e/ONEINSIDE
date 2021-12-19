@@ -11,7 +11,11 @@ export class Tab1Page implements OnInit {
   public httpService: HttpService;
 
   isUpsertingDeveloper: Boolean = false;
-  editDeveloperObj: Number | null = null;
+  editDeveloperObj: Object = {};
+  isDeletingDeveloper: any = {
+    modal: false,
+    id: Number,
+  };
 
   public ngOnInit(): void {
     this.getDevelopers()
@@ -30,9 +34,30 @@ export class Tab1Page implements OnInit {
     }
     this.isUpsertingDeveloper = true
   }
+  createDeveloper(){
+    this.editDeveloperObj = {};
+    this.isUpsertingDeveloper = true;
+  }
+  deleteDeveloper(id){
+    console.warn(id)
+    this.httpService.deleteDeveloper(id)
+    .subscribe((data:any) => {
+      this.getDevelopers()
+      console.log(data)
+      this.isDeletingDeveloper.modal = false
+    })
 
+
+  }
+  
   onUpsertDeveloper() {
     console.warn(this.editDeveloperObj)
+    this.httpService.onUpsertDevelopers(this.editDeveloperObj)
+    .subscribe((data: any) => {
+      this.getDevelopers()
+      console.log(data)
+      this.isUpsertingDeveloper = false;
+    })
   }
 
   constructor(httpService: HttpService) {
