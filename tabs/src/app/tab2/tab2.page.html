@@ -9,6 +9,7 @@
 <ion-content [fullscreen]="true">
   <div></div>
   <ngx-datatable 
+      style="padding: 5px;"
       class="dark"
       [limit]="10" 
       [rows]="dataTableRows" 
@@ -18,54 +19,63 @@
       [headerHeight]="50" 
       [footerHeight]="50">
       <ngx-datatable-column label="ID" name="id">
+        <ng-template let-column="column" ngx-datatable-header-template>ID</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="name">
+        <ng-template let-column="column" ngx-datatable-header-template>Name</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="description">
+        <ng-template let-column="column" ngx-datatable-header-template>Description</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="backend">
+        <ng-template let-column="column" ngx-datatable-header-template>Backend</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="frontend">
+        <ng-template let-column="column" ngx-datatable-header-template>Frontend</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="startTime">
+        <ng-template let-column="column" ngx-datatable-header-template>Start Time</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
-          <ion-label>{{value}}</ion-label>
+          <ion-label>{{value | date}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="endTime">
+        <ng-template let-column="column" ngx-datatable-header-template>End Time</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
-          <ion-label>{{value}}</ion-label>
+          <ion-label>{{value | date}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="budget">
+        <ng-template let-column="column" ngx-datatable-header-template>Budget</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="id">
+        <ng-template let-column="column" ngx-datatable-header-template>Actions</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-button color="primary" size="small" (click)="editProject(value)">Edit</ion-button>
           <ion-button color="danger" size="small" (click)="isDeletingProject = {modal: true, id: value }">Delete</ion-button>
         </ng-template>
       </ngx-datatable-column>
   </ngx-datatable>
-  <ion-button color="primary" size="large" (click)="createProject()">Add Project</ion-button>
-  <ion-button color="primary" size="large" (click)="isAssigningProject.modal = true">Assign Project</ion-button>
+  <ion-button color="primary" size="medium" (click)="createProject()">Add Project</ion-button>
+  <ion-button color="primary" size="medium" (click)="isAssigningProject.modal = true">Assign Project</ion-button>
 
   <!-- Modal for delete confirmation -->
   <ion-modal [isOpen]="isDeletingProject.modal" (didDismiss) ="isDeletingProject.modal = false">
@@ -119,8 +129,6 @@
           <ion-item>
             <ion-label>Backend</ion-label>
             <ion-select placeholder="Select Backend" interface="popover" [(ngModel)]="editProjectObj.backend">
-              Java, .NET,
-              NodeJS, PHP
               <ion-select-option value="Java">Java</ion-select-option>
               <ion-select-option value=".NET">.NET</ion-select-option>
               <ion-select-option value="NodeJS">NodeJS</ion-select-option>
@@ -138,21 +146,32 @@
           </ion-item>
           <ion-item>
             <ion-label>Start Time</ion-label>
-            <ion-button id="open-startTime" size="small" color="primary">Pick</ion-button>
-            <ion-modal trigger="open-startTime">
+            <ion-button id="popover1" class="flat">{{editProjectObj.startTime | date}}</ion-button>
+            <ion-popover trigger="popover1">
+              <ng-template>
                 <ion-datetime [(ngModel)]="editProjectObj.startTime"></ion-datetime>
-            </ion-modal>
+              </ng-template>
+            </ion-popover>
           </ion-item>
           <ion-item>
             <ion-label>End Time</ion-label>
-            <ion-button id="open-endTime" size="small" color="primary">Pick</ion-button>
-            <ion-modal trigger="open-endTime">
-              <ion-datetime [(ngModel)]="editProjectObj.endTime"></ion-datetime>
-            </ion-modal>
+            <ion-button id="popover2" class="flat">{{editProjectObj.endTime | date}}</ion-button>
+            <ion-popover trigger="popover2">
+              <ng-template>
+                <ion-datetime [(ngModel)]="editProjectObj.endTime"></ion-datetime>
+              </ng-template>
+            </ion-popover>
           </ion-item>
           <ion-item>
-            <ion-label>Name</ion-label>
+            <ion-label>Budget</ion-label>
             <ion-input class="ion-text-center" placeholder="Budget" [(ngModel)]="editProjectObj.budget"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Developers</ion-label>
+            <ion-select [(ngModel)]="assignmentSelection.developerId" placeholder="Select a Developer">
+              <ion-select-option *ngFor="let developer of editProjectObj.developers" [value]="developer.id">{{developer.name}}</ion-select-option>
+            </ion-select>
+            <ion-button color="danger" (click)="fireDeveloper(assignmentSelection)">Remove Developer</ion-button>
           </ion-item>
           <ion-item>
             <div class="display: flex; justify-content: center; width: 100%;">

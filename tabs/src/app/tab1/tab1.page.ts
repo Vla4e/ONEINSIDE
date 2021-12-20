@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../http/http.service';
+import { ColumnMode } from '@swimlane/ngx-datatable';
 
 @Component({
   selector: 'app-tab1',
@@ -11,6 +12,7 @@ export class Tab1Page implements OnInit {
   public httpService: HttpService;
   public columns: any;
   public dataTableRows: any;
+  ColumnMode = ColumnMode;
 
   isUpsertingDeveloper: Boolean = false;
   editDeveloperObj: Object = {};
@@ -37,7 +39,6 @@ export class Tab1Page implements OnInit {
   }
 
   editDeveloper(id) {
-    console.log('This is ID', id)
     this.editDeveloperObj = {
       ...this.developers.find(x => x.id === id)
     }
@@ -48,11 +49,9 @@ export class Tab1Page implements OnInit {
     this.isUpsertingDeveloper = true;
   }
   deleteDeveloper(id){
-    console.warn(id)
     this.httpService.deleteDeveloper(id)
     .subscribe((data:any) => {
       this.getDevelopers()
-      console.log(data)
       this.isDeletingDeveloper.modal = false
     })
 
@@ -60,11 +59,9 @@ export class Tab1Page implements OnInit {
   }
   
   onUpsertDeveloper() {
-    console.warn(this.editDeveloperObj)
     this.httpService.onUpsertDevelopers(this.editDeveloperObj)
     .subscribe((data: any) => {
       this.getDevelopers()
-      console.log(data)
       this.isUpsertingDeveloper = false;
     })
   }

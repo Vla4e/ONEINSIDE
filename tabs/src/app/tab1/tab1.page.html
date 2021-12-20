@@ -9,68 +9,54 @@
 <ion-content [fullscreen]="true">
   <div></div>
   <ngx-datatable 
+      style="padding: 5px;"
       class="dark"
       [limit]="10" 
       [rows]="dataTableRows" 
       [rowHeight]="50"
-      [columnMode]="'force'" 
+      [columnMode]="ColumnMode.force" 
       [sortType]="'multi'" 
       [headerHeight]="50" 
       [footerHeight]="50">
       <ngx-datatable-column label="ID" name="id">
+        <ng-template let-column="column" ngx-datatable-header-template>ID</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="name">
+        <ng-template let-column="column" ngx-datatable-header-template>Name</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="position">
+        <ng-template let-column="column" ngx-datatable-header-template>Position</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="startWork">
+        <ng-template let-column="column" ngx-datatable-header-template>Started</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value.getFullYear()}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="level">
+        <ng-template let-column="column" ngx-datatable-header-template>Level</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-label>{{value}}</ion-label>
         </ng-template>
       </ngx-datatable-column>
       <ngx-datatable-column name="id">
+        <ng-template let-column="column" ngx-datatable-header-template>Actions</ng-template>
         <ng-template let-value="value" ngx-datatable-cell-template>
           <ion-button color="primary" size="small" (click)="editDeveloper(value)">Edit</ion-button>
           <ion-button color="danger" size="small" (click)="isDeletingDeveloper = {modal: true, id: value }">Delete</ion-button>
         </ng-template>
       </ngx-datatable-column>
   </ngx-datatable>
-  <ion-grid>
-    <ion-row class="row header">
-      <ion-col size="1">ID</ion-col>
-      <ion-col size="2">Name</ion-col>
-      <ion-col size="2">Position</ion-col>
-      <ion-col size="3">Starting year</ion-col>
-      <ion-col size="2">Level</ion-col>
-      <ion-col size="2">Actions</ion-col>
-    </ion-row>
-    <ion-row *ngFor="let developer of developers" class="row">
-      <ion-col size="1">{{ developer.id}}</ion-col>
-      <ion-col size="2">{{ developer.name }}</ion-col>
-      <ion-col size="2">{{ developer.position}}</ion-col>
-      <ion-col size="3">{{ developer.startWork}}</ion-col>
-      <ion-col size="2">{{ developer.level}}</ion-col>
-      <ion-col size="2">
-        <ion-button color="primary" size="small" (click)="editDeveloper(developer.id)">Edit</ion-button>
-        <ion-button color="danger" size="small" (click)="isDeletingDeveloper = {modal: true, id: developer.id }">Delete</ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-  <ion-button color="primary" size="large" (click)="createDeveloper()">Add Developer</ion-button>
+  <ion-button color="primary" size="medium" (click)="createDeveloper()">Add Developer</ion-button>
   
   <ion-modal [isOpen]="isDeletingDeveloper.modal" (didDismiss) ="isDeletingDeveloper.modal = false">
     <ng-template>

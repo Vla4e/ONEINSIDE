@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { Tab2Page } from './tab2.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
-
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 
 @NgModule({

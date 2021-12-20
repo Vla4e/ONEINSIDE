@@ -12,9 +12,12 @@ export class Tab2Page implements OnInit {
   public httpService: HttpService;
   public columns: any;
   public dataTableRows: any;
+  public assignedDevelopers: any;
   
+  isStartTimeOpen: Boolean = false;
+  isEndTimeOpen: Boolean = false;
   isUpsertingProject: Boolean = false;
-  editProjectObj: Object = {};
+  editProjectObj: any = {};
   assignmentSelection: any = {
     projectId: Number,
     developerId: Number,
@@ -49,13 +52,18 @@ export class Tab2Page implements OnInit {
             ...x,
           }
         })
+        this.assignedDevelopers  = data.map((x)=>{
+          return{
+            ...x.developers,
+          }
+        })
     })
   }
   editProject(id) {
-    console.log('This is ID', id)
     this.editProjectObj = {
       ...this.projects.find(x => x.id === id)
     }
+    this.assignmentSelection.projectId = id;
     this.isUpsertingProject = true
   }
   createProject(){
@@ -63,42 +71,35 @@ export class Tab2Page implements OnInit {
     this.isUpsertingProject = true;
   }
   deleteProject(id){
-    console.warn(id)
     this.httpService.deleteProject(id)
     .subscribe((data:any) => {
       this.getProjects()
-      console.log(data)
       this.isDeletingProject.modal = false
     })
 
 
   }
   onUpsertProject() {
-    console.warn(this.editProjectObj)
     this.httpService.onUpsertProjects(this.editProjectObj)
     .subscribe((data: any) => {
       this.getProjects()
-      console.log(data)
       this.isUpsertingProject = false;
     })
   }
 
   //Assignments
   createAssignment(assignmentSelection){
-    console.warn(assignmentSelection)
     this.httpService.createAssignment(assignmentSelection)
     .subscribe((data: any) => {
       this.getProjects()
-      console.log(data)
       this.isAssigningProject.modal = false
     })
   }
   fireDeveloper(assignmentSelection){
-    console.warn(assignmentSelection)
+    if(!assignmentSelection.developerId) return;
     this.httpService.fireDeveloper(assignmentSelection)
     .subscribe((data: any) => {
       this.getProjects()
-      console.log(data)
       this.isUpsertingProject = false;
     })
   }

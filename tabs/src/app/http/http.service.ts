@@ -8,6 +8,7 @@ import { catchError, retry } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class HttpService {
+  //TODO: change to one baseurl
   baseUrlDev = 'http://localhost:3000/developers';
   baseUrlProjects = 'http://localhost:3000/projects'
   baseUrlAssignment ='http://localhost:3000/assignments'
@@ -20,8 +21,8 @@ export class HttpService {
     })
   }
   fireDeveloper(assignment){
-    const url = `${this.baseUrlAssignment}/${assignment}`
-    return this.http.delete<any>(url)
+    const url = `${this.baseUrlAssignment}`
+    return this.http.delete<any>(url, { body: assignment })
   }
 
   //Project Calls
@@ -30,40 +31,29 @@ export class HttpService {
   }
   deleteProject(id){
     const url = `${this.baseUrlProjects}/${id}`
-    console.warn(id)
     return this.http.delete<any>(url)
   }
-  onUpsertProjects(developer){
-    console.warn(developer)
-    if(!developer.id){
+  onUpsertProjects(project){
+    if(!project.id){
       return this.http.post<any>(this.baseUrlProjects, {
-        name: developer.name,
-        position: developer.position,
-        startWork: developer.startWork,
-        level: developer.level
+        ...project,
       });
     } else {
       return this.http.put<any>(this.baseUrlProjects, {
-        id: developer.id,
-        name: developer.name,
-        position: developer.position,
-        startWork: developer.startWork,
-        level: developer.level
+        ...project,
       })
     }
   }
-  
+
   //Developer Calls
   getDevelopers() {
     return this.http.get<any>(this.baseUrlDev);
   }
   deleteDeveloper(id){
     const url = `${this.baseUrlDev}/${id}`
-    console.warn(id)
     return this.http.delete<any>(url)
   }
   onUpsertDevelopers(developer){
-    console.warn(developer)
     if(!developer.id){
       return this.http.post<any>(this.baseUrlDev, {
         name: developer.name,
