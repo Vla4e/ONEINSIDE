@@ -9,6 +9,8 @@ import { HttpService } from '../http/http.service';
 export class Tab1Page implements OnInit {
   public developers: Array<any> = [];
   public httpService: HttpService;
+  public columns: any;
+  public dataTableRows: any;
 
   isUpsertingDeveloper: Boolean = false;
   editDeveloperObj: Object = {};
@@ -25,10 +27,17 @@ export class Tab1Page implements OnInit {
     this.httpService.getDevelopers()
       .subscribe((data: any) => {
         this.developers = data
+        this.dataTableRows = data.map((x) => {
+          return {
+            ...x,
+            startWork: new Date(x.startWork)
+          }
+        })
       })
   }
 
   editDeveloper(id) {
+    console.log('This is ID', id)
     this.editDeveloperObj = {
       ...this.developers.find(x => x.id === id)
     }
@@ -60,7 +69,15 @@ export class Tab1Page implements OnInit {
     })
   }
 
-  constructor(httpService: HttpService) {
+  constructor(httpService: HttpService,) {
+      this.columns = [
+        {name: 'ID'},
+        {name: 'Name'},
+        {name: 'Position'},
+        {name: 'Starting Year'},
+        {name: 'Level'},
+        
+      ]
     this.httpService = httpService
   }
 }

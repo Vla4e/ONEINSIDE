@@ -5,6 +5,8 @@ import { FormsModule } from '@angular/forms';
 import { Tab1Page } from './tab1.page';
 import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
 
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+
 import { Tab1PageRoutingModule } from './tab1-routing.module';
 
 @NgModule({
@@ -13,7 +15,8 @@ import { Tab1PageRoutingModule } from './tab1-routing.module';
     CommonModule,
     FormsModule,
     ExploreContainerComponentModule,
-    Tab1PageRoutingModule
+    Tab1PageRoutingModule,
+    NgxDatatableModule,
   ],
   declarations: [Tab1Page]
 })

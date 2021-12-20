@@ -1,13 +1,54 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1234
+      Developers
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div></div>
+  <ngx-datatable 
+      class="dark"
+      [limit]="10" 
+      [rows]="dataTableRows" 
+      [rowHeight]="50"
+      [columnMode]="'force'" 
+      [sortType]="'multi'" 
+      [headerHeight]="50" 
+      [footerHeight]="50">
+      <ngx-datatable-column label="ID" name="id">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="name">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="position">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="startWork">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value.getFullYear()}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="level">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="id">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-button color="primary" size="small" (click)="editDeveloper(value)">Edit</ion-button>
+          <ion-button color="danger" size="small" (click)="isDeletingDeveloper = {modal: true, id: value }">Delete</ion-button>
+        </ng-template>
+      </ngx-datatable-column>
+  </ngx-datatable>
   <ion-grid>
     <ion-row class="row header">
       <ion-col size="1">ID</ion-col>

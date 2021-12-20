@@ -7,7 +7,6 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,8 +15,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     BrowserModule, 
     HttpClientModule, 
     IonicModule.forRoot(), 
-    AppRoutingModule, 
-    NgxDatatableModule,],
+    AppRoutingModule,
+  ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })

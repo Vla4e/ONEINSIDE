@@ -1,17 +1,166 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Projects
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div></div>
+  <ngx-datatable 
+      class="dark"
+      [limit]="10" 
+      [rows]="dataTableRows" 
+      [rowHeight]="50"
+      [columnMode]="'force'" 
+      [sortType]="'multi'" 
+      [headerHeight]="50" 
+      [footerHeight]="50">
+      <ngx-datatable-column label="ID" name="id">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="name">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="description">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="backend">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="frontend">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="startTime">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="endTime">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="budget">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-label>{{value}}</ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="id">
+        <ng-template let-value="value" ngx-datatable-cell-template>
+          <ion-button color="primary" size="small" (click)="editProject(value)">Edit</ion-button>
+          <ion-button color="danger" size="small" (click)="isDeletingProject = {modal: true, id: value }">Delete</ion-button>
+        </ng-template>
+      </ngx-datatable-column>
+  </ngx-datatable>
+  <ion-button color="primary" size="large" (click)="createProject()">Add Project</ion-button>
+  <ion-button color="primary" size="large" (click)="isAssigningProject.modal = true">Assign Project</ion-button>
 
-  <app-explore-container name="Tab 2 page"></app-explore-container>
+  <!-- Modal for delete confirmation -->
+  <ion-modal [isOpen]="isDeletingProject.modal" (didDismiss) ="isDeletingProject.modal = false">
+    <ng-template>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            Are you sure you want to remove this project?
+          </ion-card-title>
+          <ion-button color="danger" size="small" (click)="deleteProject(isDeletingProject.id)">Yes</ion-button>
+        </ion-card-header>
+      </ion-card>
+    </ng-template>
+  </ion-modal>
+  
+  <!-- Modal for assignments -->
+  <ion-modal [isOpen]="isAssigningProject.modal" (didDismiss) ="isAssigningProject.modal = false">
+    <ng-template>
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title style="margin-bottom: 4px;">
+            Assign a Project to Developer
+          </ion-card-title>
+            <ion-label>Projects</ion-label>
+            <ion-select interface="popover" [(ngModel)]="assignmentSelection.projectId">
+              <ion-select-option  *ngFor="let project of projects" [value]="project.id">{{project.name}}</ion-select-option>
+            </ion-select>
+            <ion-label>Developers</ion-label>
+            <ion-select interface="popover" [(ngModel)]="assignmentSelection.developerId">
+              <ion-select-option *ngFor="let developer of developers" [value]="developer.id">{{developer.name}}</ion-select-option>
+            </ion-select>
+          <ion-button color="danger" size="small" (click)="createAssignment(assignmentSelection)">Assign</ion-button>
+        </ion-card-header>
+      </ion-card>
+    </ng-template>
+  </ion-modal>
+  
+  <!-- Modal for upserting project -->
+  <ion-modal [isOpen]="isUpsertingProject" (didDismiss)="isUpsertingProject = false">
+    <div style="overflow: scroll; height: 400px">
+      <ng-template>
+        <ion-list>
+          <ion-item>
+            <ion-label>Name</ion-label>
+            <ion-input class="ion-text-center" placeholder="Project Name" [(ngModel)]="editProjectObj.name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Description</ion-label>
+            <ion-input class="ion-text-center" placeholder="Description" [(ngModel)]="editProjectObj.description"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Backend</ion-label>
+            <ion-select placeholder="Select Backend" interface="popover" [(ngModel)]="editProjectObj.backend">
+              Java, .NET,
+              NodeJS, PHP
+              <ion-select-option value="Java">Java</ion-select-option>
+              <ion-select-option value=".NET">.NET</ion-select-option>
+              <ion-select-option value="NodeJS">NodeJS</ion-select-option>
+              <ion-select-option value="PHP">PHP</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Frontend</ion-label>
+            <ion-select interface="popover" placeholder="Select Frontend" [(ngModel)]="editProjectObj.frontend">
+              <ion-select-option value="Angular">Angular</ion-select-option>
+              <ion-select-option value="React">React</ion-select-option>
+              <ion-select-option value="Vue">Vue</ion-select-option>
+              <ion-select-option value="Vanilajs">Vanilajs</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Start Time</ion-label>
+            <ion-button id="open-startTime" size="small" color="primary">Pick</ion-button>
+            <ion-modal trigger="open-startTime">
+                <ion-datetime [(ngModel)]="editProjectObj.startTime"></ion-datetime>
+            </ion-modal>
+          </ion-item>
+          <ion-item>
+            <ion-label>End Time</ion-label>
+            <ion-button id="open-endTime" size="small" color="primary">Pick</ion-button>
+            <ion-modal trigger="open-endTime">
+              <ion-datetime [(ngModel)]="editProjectObj.endTime"></ion-datetime>
+            </ion-modal>
+          </ion-item>
+          <ion-item>
+            <ion-label>Name</ion-label>
+            <ion-input class="ion-text-center" placeholder="Budget" [(ngModel)]="editProjectObj.budget"></ion-input>
+          </ion-item>
+          <ion-item>
+            <div class="display: flex; justify-content: center; width: 100%;">
+              <ion-button color="primary" size="small" (click)="onUpsertProject()">Submit Changes</ion-button>
+            </div>
+          </ion-item>
+        </ion-list>
+      </ng-template>
+    </div>
+  </ion-modal>
 </ion-content>
